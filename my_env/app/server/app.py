@@ -38,6 +38,12 @@ def root() -> dict:
     }
 
 
+@app.get("/web")
+def web() -> dict:
+    # Some HF views probe /web; return the same healthful payload as root.
+    return root()
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
