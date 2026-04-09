@@ -133,7 +133,12 @@ class EmergencyEnv:
                     delay_penalty=MIN_REWARD,
                 ),
             ),
-            grader=None,
+            grader=grade_task(
+                task_id=resolved_task_id,
+                difficulty=difficulty,
+                objective=TASKS[resolved_task_id]["objective"],
+                trajectory=[],
+            ),
             last_action_error=None,
             outcome=None,
         )
@@ -908,14 +913,14 @@ class EmergencyEnv:
     ) -> None:
         assert self.state_data is not None
 
-        grader_result = None
-        if self.state_data.done:
-            grader_result = grade_task(
-                task_id=self.state_data.task_id,
-                difficulty=self.state_data.scenario_difficulty,
-                objective=self.state_data.task_objective,
-                trajectory=self.trajectory,
-            )
+        # Always expose a bounded task score snapshot so external validators
+        # never see a missing grader and fallback to 0.0/1.0.
+        grader_result = grade_task(
+            task_id=self.state_data.task_id,
+            difficulty=self.state_data.scenario_difficulty,
+            objective=self.state_data.task_objective,
+            trajectory=self.trajectory,
+        )
 
         self.last_info = StepInfo(
             task_id=self.state_data.task_id,
