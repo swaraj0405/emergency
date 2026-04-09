@@ -17,9 +17,15 @@ import os
 import random
 from pathlib import Path
 from datetime import datetime, timezone
+from typing import Union, TYPE_CHECKING, Optional, cast
 
 from app.environment.core import EmergencyEnv
 from app.models.action import Action
+
+if TYPE_CHECKING:
+    from openai import OpenAI as OpenAIClient
+else:
+    OpenAIClient = None
 
 try:
     from openai import OpenAI
@@ -78,7 +84,7 @@ def runtime_llm_config() -> dict[str, str]:
     }
 
 
-def require_llm_config() -> tuple[object, str]:
+def require_llm_config() -> tuple[OpenAIClient, str]:
     config = runtime_llm_config()
     missing = [name for name, value in config.items() if not value]
     if missing:
@@ -95,7 +101,7 @@ def require_llm_config() -> tuple[object, str]:
 
 
 def llm_rationale(
-    client: object,
+    client: Union[OpenAIClient, None],
     model_name: str,
     observation: dict,
     chosen: dict,
@@ -105,6 +111,8 @@ def llm_rationale(
         f"Selected {chosen['hospital_id']} by {strategy}; "
         f"score={chosen['policy_score']:.3f}, traffic={chosen['traffic']}, icu={chosen['icu']}"
     )
+    if client is None:
+        return fallback
     try:
         prompt = (
             "You are an emergency routing agent. Return one short sentence rationale "
@@ -971,7 +979,7 @@ def run_episode(
                 strategy = strategy + " + immediate-retry override"
 
         print_options(scored)
-        rationale = llm_rationale(llm_client, model_name or "", observation, chosen, strategy)
+        rationale = llm_rationale(cast(Optional[OpenAIClient], llm_client), model_name or "", observation, chosen, strategy)
         print(f"Decision: {chosen['hospital_id']} ({strategy})")
 
         step_result = env.step(

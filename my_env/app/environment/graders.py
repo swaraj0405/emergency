@@ -1,3 +1,5 @@
+from typing import cast, Literal
+
 from app.models.reward import GraderResult
 
 
@@ -90,8 +92,8 @@ def grade_task(
     score = max(MIN_SCORE, min(MAX_SCORE, score))
 
     return GraderResult(
-        task_id=task_id,
-        difficulty=difficulty,
+        task_id=cast(Literal["acde_easy", "acde_medium", "acde_hard"], task_id),
+        difficulty=cast(Literal["easy", "medium", "hard"], difficulty),
         objective=objective,
         score=score,
         passed=score >= threshold,

@@ -1,0 +1,14 @@
+{
+  "venvPath": ".",
+  "venv": ".venv",
+  "include": [
+    "my_env",
+    "validate_submission.py",
+    "inference.py"
+  ],
+  "extraPaths": [
+    ".",
+    "my_env"
+  ],
+  "pythonVersion": "3.12"
+}

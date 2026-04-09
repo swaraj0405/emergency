@@ -1,4 +1,4 @@
-import json
+﻿import json
 from pathlib import Path
 from typing import Any, Literal, cast
 
@@ -59,7 +59,7 @@ class EmergencyEnv:
         if seed is None:
             seed = self._rng.randint(1, 10**9)
 
-        resolved_task_id = task_id if task_id in TASKS else self._rng.choice(list(TASKS.keys()))
+        resolved_task_id = cast(Literal["acde_easy", "acde_medium", "acde_hard"], task_id if task_id in TASKS else self._rng.choice(list(TASKS.keys())))
         difficulty = TASKS[resolved_task_id]["difficulty"]
 
         self._rng = SeededRandomizer(seed)
@@ -82,7 +82,7 @@ class EmergencyEnv:
         self.state_data = EnvState(
             episode_id=self.episode_counter,
             seed=seed,
-            task_id=resolved_task_id,
+            task_id=cast(Literal["acde_easy", "acde_medium", "acde_hard"], resolved_task_id),
             task_objective=TASKS[resolved_task_id]["objective"],
             scenario_type=cast(Literal["medical", "accident", "fire"], scenario_type),
             scenario_name=scenario["scenario_name"],
@@ -120,7 +120,7 @@ class EmergencyEnv:
         )
 
         self.last_info = StepInfo(
-            task_id=resolved_task_id,
+            task_id=cast(Literal["acde_easy", "acde_medium", "acde_hard"], resolved_task_id),
             difficulty=cast(Literal["easy", "medium", "hard"], difficulty),
             objective=TASKS[resolved_task_id]["objective"],
             progress_score=MIN_REWARD,
@@ -1062,6 +1062,8 @@ class EmergencyEnv:
             (generate_accident_case, "accident"),
             (generate_fire_case, "fire"),
         ]
+        scenario: dict[str, Any] = {}
+        scenario_type = "medical"
         for _ in range(64):
             generator, scenario_type = self._rng.choice(generators)
             scenario = generator(self._rng)

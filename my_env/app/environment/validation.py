@@ -4,6 +4,8 @@ Simulates hidden validation checks performed when an ambulance arrives at a hosp
 Outcomes are based on difficulty level, hospital capacity, patient suitability, and randomness.
 """
 
+from typing import cast, Literal
+
 from app.models.state import ArrivalOutcome, HospitalValidationDetails, HospitalState
 from app.utils.randomizer import SeededRandomizer
 
@@ -64,7 +66,7 @@ class HospitalValidator:
             icu_available=icu_available,
             doctor_available=doctor_available,
             equipment_functional=equipment_functional,
-            overload_status=overload_status,
+            overload_status=cast(Literal["clear", "moderate", "severe"], overload_status),
             patient_suitability=patient_suitability,
         )
         
@@ -79,7 +81,7 @@ class HospitalValidator:
         )
         
         return ArrivalOutcome(
-            status=status,
+            status=cast(Literal["accepted", "partial", "rejected"], status),
             reason=reason,
             validation_details=validation_details,
             reward_modifier=reward_modifier,

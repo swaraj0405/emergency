@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from app.environment.core import ACDEEnvironment
 from app.models.action import Action
 from app.models.observation import Observation
-from app.models.reward import StepInfo
+from app.models.reward import StepInfo, GraderResult, RewardModel, RewardBreakdown
 from app.models.state import EnvState
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -55,7 +55,7 @@ def reset(payload: ResetRequest | None = None) -> StepResponse:
     seed = payload.seed if payload else None
     task_id = payload.task_id if payload else None
     obs = env.reset(seed=seed, task_id=task_id)
-    info = env.last_info.model_dump() if env.last_info else {}
+    info = env.last_info if env.last_info else StepInfo(task_id="acde_medium", difficulty="medium", objective="", progress_score=MIN_REWARD, reward_model=RewardModel(value=MIN_REWARD, breakdown=RewardBreakdown(survival_component=MIN_REWARD, time_efficiency_component=MIN_REWARD, specialization_component=MIN_REWARD, delay_penalty=MIN_REWARD)), grader=GraderResult(task_id="acde_medium", difficulty="medium", objective="", score=MIN_REWARD, passed=False, criteria={}), last_action_error=None, outcome=None)
     return StepResponse(observation=obs, reward=MIN_REWARD, done=False, info=info)
 
 
