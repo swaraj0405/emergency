@@ -7,8 +7,8 @@ MAX_SCORE = 0.999
 
 def _norm_margin(travel_time: float, critical_limit: float) -> float:
     if critical_limit <= 0:
-        return 0.0
-    return max(0.0, min(1.0, (critical_limit - travel_time) / critical_limit))
+        return MIN_SCORE
+    return max(MIN_SCORE, min(MAX_SCORE, (critical_limit - travel_time) / critical_limit))
 
 
 def grade_task(
@@ -78,14 +78,14 @@ def grade_task(
 
     if difficulty == "easy":
         threshold = 0.73
-        score = min(1.0, base + 0.1)
+        score = min(MAX_SCORE, base + 0.1)
     elif difficulty == "medium":
         threshold = 0.62
         score = base
     else:  # hard
         threshold = 0.53
-        hard_bonus = 0.15 if success_rate >= 0.5 else (0.05 if success_rate > 0.0 else 0.0)
-        score = min(1.0, base + hard_bonus)
+        hard_bonus = 0.15 if success_rate >= 0.5 else (0.05 if success_rate > 0.0 else MIN_SCORE)
+        score = min(MAX_SCORE, base + hard_bonus)
 
     score = max(MIN_SCORE, min(MAX_SCORE, score))
 

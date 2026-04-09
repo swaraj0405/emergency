@@ -463,13 +463,13 @@ class EmergencyEnv:
     def _improvement_bonus(self, status: str) -> float:
         if self.last_outcome_status is None:
             self.last_outcome_status = status
-            return 0.0
+            return MIN_REWARD
 
         delta = OUTCOME_SCORE[status] - OUTCOME_SCORE[self.last_outcome_status]
         self.last_outcome_status = status
         if delta > 0:
             return 0.04
-        return 0.0
+        return MIN_REWARD
 
     def _specialization_match(self, hospital: HospitalState) -> bool:
         assert self.state_data is not None
@@ -653,7 +653,7 @@ class EmergencyEnv:
         assert self.state_data is not None
 
         if selected.icu_display != "unknown":
-            return arrival_outcome, 0.0, None
+            return arrival_outcome, MIN_REWARD, None
 
         difficulty = self.state_data.scenario_difficulty
         guess_success_prob = {
@@ -666,7 +666,7 @@ class EmergencyEnv:
         if guess_correct:
             return (
                 arrival_outcome,
-                0.0,
+                MIN_REWARD,
                 "Hidden case: risky ICU-unknown guess was correct this time.",
             )
 
@@ -690,7 +690,7 @@ class EmergencyEnv:
     ) -> tuple[ArrivalOutcome, float, str | None]:
         """Late-arrival operational shocks: ICU/doctor/bed/equipment can fail at handover."""
         if arrival_outcome.status == "rejected":
-            return arrival_outcome, 0.0, None
+            return arrival_outcome, MIN_REWARD, None
 
         shock_prob = {
             "easy": 0.03,
@@ -698,11 +698,11 @@ class EmergencyEnv:
             "hard": 0.10,
         }.get(difficulty, 0.14)
         if self._rng.random() >= shock_prob:
-            return arrival_outcome, 0.0, None
+            return arrival_outcome, MIN_REWARD, None
 
         v = arrival_outcome.validation_details
         if v is None:
-            return arrival_outcome, 0.0, None
+            return arrival_outcome, MIN_REWARD, None
 
         shock = self._rng.choice([
             "doctor_unavailable",
@@ -1104,7 +1104,7 @@ class EmergencyEnv:
 
     def _progress_score(self) -> float:
         if not self.trajectory:
-            return 0.0
+            return MIN_REWARD
         raw = sum(float(t["reward"]) for t in self.trajectory) / len(self.trajectory)
         return max(MIN_REWARD, min(MAX_REWARD, raw))
 
