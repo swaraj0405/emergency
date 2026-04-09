@@ -45,7 +45,7 @@ REQUIRED_ENV_VARS = ("HF_TOKEN",)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="EmergencyEnv agent runner")
-    parser.add_argument("--mode", choices=["single", "full"], default="single")
+    parser.add_argument("--mode", choices=["single", "full"], default="full")
     parser.add_argument("--task", choices=TASK_ORDER, default=None)
     parser.add_argument("--level", choices=["low", "medium", "high"], default=None)
     parser.add_argument("--seed", type=int, default=None)

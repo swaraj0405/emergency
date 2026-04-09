@@ -6829,6 +6829,213 @@
       "best_scenario_name": "Urban Pile-up (Rush Hour)",
       "best_difficulty": "medium",
       "best_required_specialization": "trauma"
+    },
+    "894675818|acde_easy": {
+      "attempts": 1,
+      "best_score": 0.753,
+      "best_actions": [
+        "H1",
+        "H4"
+      ],
+      "best_steps": 2,
+      "step_stats": {
+        "1": {
+          "H1": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.14,
+            "avg_reward": 0.14,
+            "last_status": "REJECTED",
+            "last_reason": "Hospital cannot admit: ICU unavailable",
+            "success_rate": 0.0
+          }
+        },
+        "2": {
+          "H4": {
+            "count": 1,
+            "success": 1,
+            "accepted": 1,
+            "partial": 0,
+            "rejected": 0,
+            "total_reward": 1.0,
+            "avg_reward": 1.0,
+            "last_status": "ACCEPTED",
+            "last_reason": "Patient admitted and treatment began",
+            "success_rate": 1.0
+          }
+        }
+      },
+      "last_score": 0.753,
+      "last_success": true,
+      "last_run_at": "2026-04-09T04:31:25.951393+00:00",
+      "last_actions": [
+        "H1",
+        "H4"
+      ],
+      "last_required_specialization": "trauma",
+      "last_scenario_type": "accident",
+      "last_scenario_name": "Highway Collision (Severe)",
+      "best_success": true,
+      "best_scenario_name": "Highway Collision (Severe)",
+      "best_difficulty": "easy",
+      "best_required_specialization": "trauma"
+    },
+    "894675819|acde_medium": {
+      "attempts": 1,
+      "best_score": 0.19583333333333333,
+      "best_actions": [
+        "H2",
+        "H3",
+        "H2"
+      ],
+      "best_steps": 3,
+      "step_stats": {
+        "1": {
+          "H2": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 1,
+            "rejected": 0,
+            "total_reward": 0.44000000000000006,
+            "avg_reward": 0.44000000000000006,
+            "last_status": "PARTIAL",
+            "last_reason": "Admitted with delays: prolonged transfer strain",
+            "success_rate": 0.0
+          }
+        },
+        "2": {
+          "H3": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.11,
+            "avg_reward": 0.11,
+            "last_status": "REJECTED",
+            "last_reason": "Condition became irreversible after delays",
+            "success_rate": 0.0
+          }
+        },
+        "3": {
+          "H2": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.0,
+            "avg_reward": 0.0,
+            "last_status": "REJECTED",
+            "last_reason": "Condition became non-transferable during delay; immediate critical care failed",
+            "success_rate": 0.0
+          }
+        }
+      },
+      "last_score": 0.19583333333333333,
+      "last_success": false,
+      "last_run_at": "2026-04-09T04:31:26.882664+00:00",
+      "last_actions": [
+        "H2",
+        "H3",
+        "H2"
+      ],
+      "last_required_specialization": "trauma",
+      "last_scenario_type": "accident",
+      "last_scenario_name": "Urban Pile-up (Rush Hour)",
+      "best_success": false,
+      "best_scenario_name": "Urban Pile-up (Rush Hour)",
+      "best_difficulty": "medium",
+      "best_required_specialization": "trauma"
+    },
+    "894675820|acde_hard": {
+      "attempts": 1,
+      "best_score": 0.24556250000000002,
+      "best_actions": [
+        "H2",
+        "H3",
+        "H6",
+        "H4"
+      ],
+      "best_steps": 4,
+      "step_stats": {
+        "1": {
+          "H2": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.0,
+            "avg_reward": 0.0,
+            "last_status": "REJECTED",
+            "last_reason": "Hospital cannot admit: ICU unavailable, Hospital overloaded",
+            "success_rate": 0.0
+          }
+        },
+        "2": {
+          "H3": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.0,
+            "avg_reward": 0.0,
+            "last_status": "REJECTED",
+            "last_reason": "Hospital cannot admit: No specialist available",
+            "success_rate": 0.0
+          }
+        },
+        "3": {
+          "H6": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 0,
+            "rejected": 1,
+            "total_reward": 0.11,
+            "avg_reward": 0.11,
+            "last_status": "REJECTED",
+            "last_reason": "Hospital cannot admit: ICU unavailable, No specialist available",
+            "success_rate": 0.0
+          }
+        },
+        "4": {
+          "H4": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 1,
+            "rejected": 0,
+            "total_reward": 0.215,
+            "avg_reward": 0.215,
+            "last_status": "PARTIAL",
+            "last_reason": "Critical deterioration managed temporarily; reroute still needed",
+            "success_rate": 0.0
+          }
+        }
+      },
+      "last_score": 0.24556250000000002,
+      "last_success": false,
+      "last_run_at": "2026-04-09T04:31:28.103177+00:00",
+      "last_actions": [
+        "H2",
+        "H3",
+        "H6",
+        "H4"
+      ],
+      "last_required_specialization": "cardiac",
+      "last_scenario_type": "medical",
+      "last_scenario_name": "Mass Cardiac Event (Overload)",
+      "best_success": false,
+      "best_scenario_name": "Mass Cardiac Event (Overload)",
+      "best_difficulty": "hard",
+      "best_required_specialization": "cardiac"
     }
   },
   "episodes": [
@@ -8533,6 +8740,51 @@
         "H2"
       ],
       "timestamp": "2026-04-09T04:13:22.153994+00:00"
+    },
+    {
+      "seed": 894675818,
+      "task_id": "acde_easy",
+      "difficulty": "easy",
+      "required_specialization": "trauma",
+      "scenario_name": "Highway Collision (Severe)",
+      "score": 0.753,
+      "success": true,
+      "actions": [
+        "H1",
+        "H4"
+      ],
+      "timestamp": "2026-04-09T04:31:25.951393+00:00"
+    },
+    {
+      "seed": 894675819,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "trauma",
+      "scenario_name": "Urban Pile-up (Rush Hour)",
+      "score": 0.19583333333333333,
+      "success": false,
+      "actions": [
+        "H2",
+        "H3",
+        "H2"
+      ],
+      "timestamp": "2026-04-09T04:31:26.882664+00:00"
+    },
+    {
+      "seed": 894675820,
+      "task_id": "acde_hard",
+      "difficulty": "hard",
+      "required_specialization": "cardiac",
+      "scenario_name": "Mass Cardiac Event (Overload)",
+      "score": 0.24556250000000002,
+      "success": false,
+      "actions": [
+        "H2",
+        "H3",
+        "H6",
+        "H4"
+      ],
+      "timestamp": "2026-04-09T04:31:28.103177+00:00"
     }
   ]
 }

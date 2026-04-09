@@ -1,17 +1,17 @@
 {
   "H2": {
-    "success": 106,
-    "fail": 205,
-    "avg": 0.34362861736334466,
-    "accepted": 106,
-    "rejected": 205
+    "success": 107,
+    "fail": 206,
+    "avg": 0.34283865814696546,
+    "accepted": 107,
+    "rejected": 206
   },
   "H6": {
     "success": 50,
-    "fail": 139,
-    "avg": 0.29966931216931275,
+    "fail": 140,
+    "avg": 0.2986710526315795,
     "accepted": 50,
-    "rejected": 139
+    "rejected": 140
   },
   "H5": {
     "success": 112,
@@ -21,24 +21,24 @@
     "rejected": 173
   },
   "H1": {
-    "success": 106,
-    "fail": 103,
-    "avg": 0.4164143540669854,
-    "accepted": 106,
-    "rejected": 103
+    "success": 107,
+    "fail": 105,
+    "avg": 0.4121962264150941,
+    "accepted": 107,
+    "rejected": 105
   },
   "H3": {
     "success": 93,
-    "fail": 151,
-    "avg": 0.3578348360655735,
+    "fail": 152,
+    "avg": 0.3563742857142854,
     "accepted": 93,
-    "rejected": 151
+    "rejected": 152
   },
   "H4": {
-    "success": 36,
-    "fail": 99,
-    "avg": 0.3568925925925922,
-    "accepted": 36,
-    "rejected": 99
+    "success": 37,
+    "fail": 100,
+    "avg": 0.3597846715328463,
+    "accepted": 37,
+    "rejected": 100
   }
 }

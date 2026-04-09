@@ -1,6 +1,10 @@
 from app.models.reward import GraderResult
 
 
+MIN_SCORE = 0.001
+MAX_SCORE = 0.999
+
+
 def _norm_margin(travel_time: float, critical_limit: float) -> float:
     if critical_limit <= 0:
         return 0.0
@@ -83,7 +87,7 @@ def grade_task(
         hard_bonus = 0.15 if success_rate >= 0.5 else (0.05 if success_rate > 0.0 else 0.0)
         score = min(1.0, base + hard_bonus)
 
-    score = max(0.0, min(1.0, score))
+    score = max(MIN_SCORE, min(MAX_SCORE, score))
 
     return GraderResult(
         task_id=task_id,
