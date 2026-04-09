@@ -14,6 +14,17 @@ ENV_NAME = os.getenv("ENV_NAME", "acde-openenv")
 TASK_ORDER = ["acde_easy", "acde_medium", "acde_hard"]
 TRAFFIC_FACTOR = {"low": 1.0, "medium": 0.6, "high": 0.3}
 BASE_SPEED_KMH = 60.0
+SCORE_FLOOR = 0.001
+SCORE_CEIL = 0.999
+
+
+def clamp_task_score(value: float) -> float:
+    """Clamp score-like values to the strict open interval (0, 1)."""
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        score = SCORE_FLOOR
+    return max(SCORE_FLOOR, min(SCORE_CEIL, score))
 
 
 def parse_args() -> argparse.Namespace:
@@ -260,7 +271,9 @@ def run_task_strict(task_id: str, seed: int, memory_file: str) -> None:
     try:
         reset_payload = post_json(f"{ENV_BASE_URL}/reset", {"seed": seed, "task_id": task_id}, timeout=20)
     except Exception as exc:
-        print(f"[END] success=false steps=0 score=0.00 rewards= error={str(exc)!r}")
+        print(
+            f"[END] success=false steps=0 score={clamp_task_score(0.0):.3f} rewards= error={str(exc)!r}"
+        )
         return
 
     observation = reset_payload["observation"]
@@ -293,14 +306,18 @@ def run_task_strict(task_id: str, seed: int, memory_file: str) -> None:
             )
             observation = step_payload["observation"]
         except Exception as exc:
-            print(f"[STEP] step={steps} action=route('{hid}') reward=0.00 done=true error={str(exc)!r}")
+            print(
+                f"[STEP] step={steps} action=route('{hid}') "
+                f"reward={clamp_task_score(0.0):.3f} done=true error={str(exc)!r}"
+            )
             done = True
 
     grader = ((step_payload.get("info") or {}).get("grader") or {})
-    score = float(grader.get("score", (sum(rewards) / len(rewards)) if rewards else 0.0))
+    fallback_score = (sum(rewards) / len(rewards)) if rewards else SCORE_FLOOR
+    score = clamp_task_score(grader.get("score", fallback_score))
     success = bool(grader.get("passed", score >= 0.6))
-    rewards_csv = ",".join(f"{r:.2f}" for r in rewards)
-    print(f"[END] success={b(success)} steps={steps} score={score:.2f} rewards={rewards_csv}")
+    rewards_csv = ",".join(f"{clamp_task_score(r):.3f}" for r in rewards)
+    print(f"[END] success={b(success)} steps={steps} score={score:.3f} rewards={rewards_csv}")
 
 
 def run_task_detailed(task_id: str, seed: int, memory_file: str) -> None:
@@ -331,7 +348,7 @@ def run_task_detailed(task_id: str, seed: int, memory_file: str) -> None:
     done = False
     step_no = 0
     step_notes: list[str] = []
-    final_score = 0.0
+    final_score = SCORE_FLOOR
     final_pass = False
     while not done and step_no < int(observation.get("max_steps", 3)):
         step_no += 1
@@ -394,12 +411,12 @@ def run_task_detailed(task_id: str, seed: int, memory_file: str) -> None:
 
         if done:
             grader = ((step_payload.get("info") or {}).get("grader") or {})
-            final_score = float(grader.get("score", reward))
+            final_score = clamp_task_score(grader.get("score", reward))
             final_pass = bool(grader.get("passed", final_score >= 0.6))
 
         observation = step_payload["observation"]
 
-    summarize_task(task_id, step_notes, final_score, final_pass)
+    summarize_task(task_id, step_notes, clamp_task_score(final_score), final_pass)
 
 
 def main() -> None:

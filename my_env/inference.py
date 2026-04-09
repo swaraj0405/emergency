@@ -41,6 +41,13 @@ LEARNING_ARCHIVE_VERSION = 2
 DEFAULT_API_BASE_URL = "https://api-inference.huggingface.co/v1"
 DEFAULT_MODEL_NAME = "Qwen/Qwen2.5-72B-Instruct"
 REQUIRED_ENV_VARS = ("HF_TOKEN",)
+STRICT_SCORE_MIN = 0.001
+STRICT_SCORE_MAX = 0.999
+
+
+def clamp_strict_score(value: float) -> float:
+    """Clamp score-like outputs to the strict open interval (0, 1)."""
+    return max(STRICT_SCORE_MIN, min(STRICT_SCORE_MAX, float(value)))
 
 
 def parse_args() -> argparse.Namespace:
@@ -1046,7 +1053,7 @@ def run_episode(
 
     final_state = env.state()
     final_result = final_state.final_outcome or "FAILURE"
-    final_score = float(final_state.final_score)
+    final_score = clamp_strict_score(final_state.final_score)
 
     print("\nFinal result:")
     print(f"  Result: {final_result}")
