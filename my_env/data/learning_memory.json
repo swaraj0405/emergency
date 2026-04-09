@@ -1,9 +1,9 @@
 {
   "H2": {
-    "success": 101,
+    "success": 106,
     "fail": 205,
-    "avg": 0.3412473856209156,
-    "accepted": 101,
+    "avg": 0.34362861736334466,
+    "accepted": 106,
     "rejected": 205
   },
   "H6": {
@@ -14,10 +14,10 @@
     "rejected": 139
   },
   "H5": {
-    "success": 109,
+    "success": 112,
     "fail": 173,
-    "avg": 0.38424858156028346,
-    "accepted": 109,
+    "avg": 0.38748456140350857,
+    "accepted": 112,
     "rejected": 173
   },
   "H1": {

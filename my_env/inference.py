@@ -32,6 +32,8 @@ LEVEL_TO_TASK = {
     "medium": "acde_medium",
     "high": "acde_hard",
 }
+RANDOM_LEVELS = ("medium", "high")
+RANDOM_LEVEL_WEIGHTS = (0.25, 0.75)
 BASE_SPEED_KMH = 60.0
 TRAFFIC_FACTOR = {"low": 1.0, "medium": 0.6, "high": 0.3}
 LEARNING_ARCHIVE_PATH = Path(__file__).resolve().parent / "data" / "learning_archive.json"
@@ -143,19 +145,19 @@ def normalize_seed(raw_value: int | str) -> int:
 def ask_seed_if_missing(seed: int | None) -> int:
     if seed is not None:
         return normalize_seed(seed)
-    raw = input("Enter seed number (example 555): ").strip()
-    return normalize_seed(raw)
+    # No CLI seed means a fresh randomized run.
+    return normalize_seed(random.SystemRandom().randint(1, 999_999_999))
 
 
 def ask_level_if_missing(level: str | None) -> str:
     if level in LEVEL_TO_TASK:
         return level
-
-    while True:
-        raw = input("Enter level (low, medium, high): ").strip().lower()
-        if raw in LEVEL_TO_TASK:
-            return raw
-        print("Please enter low, medium, or high.")
+    # No CLI level means pick a random non-easy difficulty.
+    return random.choices(
+        RANDOM_LEVELS,
+        weights=RANDOM_LEVEL_WEIGHTS,
+        k=1,
+    )[0]
 
 
 def append_trajectory_log(entry: dict) -> None:

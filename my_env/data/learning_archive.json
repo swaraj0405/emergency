@@ -6649,6 +6649,186 @@
       "best_scenario_name": "Wildfire Front (Evacuation Gridlock)",
       "best_difficulty": "hard",
       "best_required_specialization": "general"
+    },
+    "555|acde_medium": {
+      "attempts": 2,
+      "best_score": 0.5391400000000001,
+      "best_actions": [
+        "H2",
+        "H2"
+      ],
+      "best_steps": 2,
+      "step_stats": {
+        "1": {
+          "H2": {
+            "count": 2,
+            "success": 0,
+            "accepted": 0,
+            "partial": 2,
+            "rejected": 0,
+            "total_reward": 0.8000000000000002,
+            "avg_reward": 0.4000000000000001,
+            "last_status": "PARTIAL",
+            "last_reason": "Admitted with delays: prolonged transfer strain",
+            "success_rate": 0.0
+          }
+        },
+        "2": {
+          "H2": {
+            "count": 2,
+            "success": 2,
+            "accepted": 2,
+            "partial": 0,
+            "rejected": 0,
+            "total_reward": 0.9512000000000002,
+            "avg_reward": 0.4756000000000001,
+            "last_status": "ACCEPTED",
+            "last_reason": "Patient stabilized after critical delay",
+            "success_rate": 1.0
+          }
+        }
+      },
+      "last_score": 0.5391400000000001,
+      "last_success": true,
+      "last_run_at": "2026-04-09T04:08:07.634879+00:00",
+      "last_actions": [
+        "H2",
+        "H2"
+      ],
+      "last_required_specialization": "cardiac",
+      "last_scenario_type": "medical",
+      "last_scenario_name": "Heart Attack (Unstable)",
+      "best_success": true,
+      "best_scenario_name": "Heart Attack (Unstable)",
+      "best_difficulty": "medium",
+      "best_required_specialization": "cardiac"
+    },
+    "553093117|acde_medium": {
+      "attempts": 1,
+      "best_score": 0.8470000000000001,
+      "best_actions": [
+        "H5"
+      ],
+      "best_steps": 1,
+      "step_stats": {
+        "1": {
+          "H5": {
+            "count": 1,
+            "success": 1,
+            "accepted": 1,
+            "partial": 0,
+            "rejected": 0,
+            "total_reward": 0.8200000000000001,
+            "avg_reward": 0.8200000000000001,
+            "last_status": "ACCEPTED",
+            "last_reason": "Patient admitted and treatment began",
+            "success_rate": 1.0
+          }
+        }
+      },
+      "last_score": 0.8470000000000001,
+      "last_success": true,
+      "last_run_at": "2026-04-09T04:13:06.959396+00:00",
+      "last_actions": [
+        "H5"
+      ],
+      "last_required_specialization": "general",
+      "last_scenario_type": "fire",
+      "last_scenario_name": "Factory Fire (Chemical Exposure)",
+      "best_success": true,
+      "best_scenario_name": "Factory Fire (Chemical Exposure)",
+      "best_difficulty": "medium",
+      "best_required_specialization": "general"
+    },
+    "896528413|acde_medium": {
+      "attempts": 1,
+      "best_score": 0.9575000000000001,
+      "best_actions": [
+        "H5"
+      ],
+      "best_steps": 1,
+      "step_stats": {
+        "1": {
+          "H5": {
+            "count": 1,
+            "success": 1,
+            "accepted": 1,
+            "partial": 0,
+            "rejected": 0,
+            "total_reward": 0.9500000000000001,
+            "avg_reward": 0.9500000000000001,
+            "last_status": "ACCEPTED",
+            "last_reason": "Patient admitted and treatment began",
+            "success_rate": 1.0
+          }
+        }
+      },
+      "last_score": 0.9575000000000001,
+      "last_success": true,
+      "last_run_at": "2026-04-09T04:13:13.139042+00:00",
+      "last_actions": [
+        "H5"
+      ],
+      "last_required_specialization": "general",
+      "last_scenario_type": "fire",
+      "last_scenario_name": "Factory Fire (Chemical Exposure)",
+      "best_success": true,
+      "best_scenario_name": "Factory Fire (Chemical Exposure)",
+      "best_difficulty": "medium",
+      "best_required_specialization": "general"
+    },
+    "877427547|acde_medium": {
+      "attempts": 1,
+      "best_score": 0.6631400000000002,
+      "best_actions": [
+        "H2",
+        "H2"
+      ],
+      "best_steps": 2,
+      "step_stats": {
+        "1": {
+          "H2": {
+            "count": 1,
+            "success": 0,
+            "accepted": 0,
+            "partial": 1,
+            "rejected": 0,
+            "total_reward": 0.30500000000000005,
+            "avg_reward": 0.30500000000000005,
+            "last_status": "PARTIAL",
+            "last_reason": "Early rejection mitigated by emergency field stabilization",
+            "success_rate": 0.0
+          }
+        },
+        "2": {
+          "H2": {
+            "count": 1,
+            "success": 1,
+            "accepted": 1,
+            "partial": 0,
+            "rejected": 0,
+            "total_reward": 0.6956000000000001,
+            "avg_reward": 0.6956000000000001,
+            "last_status": "ACCEPTED",
+            "last_reason": "Patient stabilized after critical delay",
+            "success_rate": 1.0
+          }
+        }
+      },
+      "last_score": 0.6631400000000002,
+      "last_success": true,
+      "last_run_at": "2026-04-09T04:13:22.153994+00:00",
+      "last_actions": [
+        "H2",
+        "H2"
+      ],
+      "last_required_specialization": "trauma",
+      "last_scenario_type": "accident",
+      "last_scenario_name": "Urban Pile-up (Rush Hour)",
+      "best_success": true,
+      "best_scenario_name": "Urban Pile-up (Rush Hour)",
+      "best_difficulty": "medium",
+      "best_required_specialization": "trauma"
     }
   },
   "episodes": [
@@ -8285,6 +8465,74 @@
         "H1"
       ],
       "timestamp": "2026-04-08T17:11:06.866531+00:00"
+    },
+    {
+      "seed": 555,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "cardiac",
+      "scenario_name": "Heart Attack (Unstable)",
+      "score": 0.5391400000000001,
+      "success": true,
+      "actions": [
+        "H2",
+        "H2"
+      ],
+      "timestamp": "2026-04-09T04:07:30.544727+00:00"
+    },
+    {
+      "seed": 555,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "cardiac",
+      "scenario_name": "Heart Attack (Unstable)",
+      "score": 0.5391400000000001,
+      "success": true,
+      "actions": [
+        "H2",
+        "H2"
+      ],
+      "timestamp": "2026-04-09T04:08:07.634879+00:00"
+    },
+    {
+      "seed": 553093117,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "general",
+      "scenario_name": "Factory Fire (Chemical Exposure)",
+      "score": 0.8470000000000001,
+      "success": true,
+      "actions": [
+        "H5"
+      ],
+      "timestamp": "2026-04-09T04:13:06.959396+00:00"
+    },
+    {
+      "seed": 896528413,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "general",
+      "scenario_name": "Factory Fire (Chemical Exposure)",
+      "score": 0.9575000000000001,
+      "success": true,
+      "actions": [
+        "H5"
+      ],
+      "timestamp": "2026-04-09T04:13:13.139042+00:00"
+    },
+    {
+      "seed": 877427547,
+      "task_id": "acde_medium",
+      "difficulty": "medium",
+      "required_specialization": "trauma",
+      "scenario_name": "Urban Pile-up (Rush Hour)",
+      "score": 0.6631400000000002,
+      "success": true,
+      "actions": [
+        "H2",
+        "H2"
+      ],
+      "timestamp": "2026-04-09T04:13:22.153994+00:00"
     }
   ]
 }
