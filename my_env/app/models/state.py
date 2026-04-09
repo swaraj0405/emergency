@@ -56,8 +56,8 @@ class EnvState(BaseModel):
     selected_hospital_id: str | None = None
     done: bool = False
     final_outcome: Literal["SUCCESS", "FAILURE"] | None = None
-    final_score: float = Field(default=0.0, ge=0.0, le=1.0)
-    reward: float = Field(default=0.0, ge=0.0, le=1.0)
+    final_score: float = Field(default=0.001, ge=0.001, le=0.999)
+    reward: float = Field(default=0.001, ge=0.001, le=0.999)
     ambulance_status: Literal["en_route", "in_transit", "arrived", "admitted", "rerouting"] = "en_route"
     current_location_context: str = "incident_site"
     visited_hospitals: list[str] = Field(default_factory=list)

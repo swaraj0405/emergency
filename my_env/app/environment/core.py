@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal, cast
 
 from app.environment.graders import grade_task
 from app.environment.scenarios.accident import generate_accident_case
@@ -84,9 +84,9 @@ class EmergencyEnv:
             seed=seed,
             task_id=resolved_task_id,
             task_objective=TASKS[resolved_task_id]["objective"],
-            scenario_type=scenario_type,
+            scenario_type=cast(Literal["medical", "accident", "fire"], scenario_type),
             scenario_name=scenario["scenario_name"],
-            scenario_difficulty=difficulty,
+            scenario_difficulty=cast(Literal["easy", "medium", "hard"], difficulty),
             patient_condition=scenario["patient_condition"],
             required_specialization=scenario["required_specialization"],
             initial_critical_time_limit_minutes=scenario["critical_time_limit_minutes"],
@@ -121,7 +121,7 @@ class EmergencyEnv:
 
         self.last_info = StepInfo(
             task_id=resolved_task_id,
-            difficulty=difficulty,
+            difficulty=cast(Literal["easy", "medium", "hard"], difficulty),
             objective=TASKS[resolved_task_id]["objective"],
             progress_score=MIN_REWARD,
             reward_model=RewardModel(
@@ -174,7 +174,7 @@ class EmergencyEnv:
         was_failed_before = selected.hospital_id in self.state_data.failed_hospitals
 
         original_traffic = selected.traffic
-        selected.traffic = self._traffic_shift(selected.traffic, self.state_data.scenario_difficulty)
+        selected.traffic = cast(Literal["low", "medium", "high"], self._traffic_shift(selected.traffic, self.state_data.scenario_difficulty))
 
         speed = compute_speed_kmh(self.base_speed_kmh, selected.traffic)
         travel_time = compute_travel_time_minutes(selected.distance_km, speed)
@@ -288,9 +288,11 @@ class EmergencyEnv:
         )
 
         info = self.last_info.model_dump() if self.last_info else {}
+        # Clamp reward into the strict open interval (0, 1) for the external validator.
+        clamped_reward = max(MIN_REWARD, min(MAX_REWARD, reward))
         return {
             "observation": self._build_observation(),
-            "reward": reward,
+            "reward": clamped_reward,
             "done": self.state_data.done,
             "info": info,
         }
@@ -303,12 +305,11 @@ class EmergencyEnv:
             return Action(step=self.state_data.step, hospital_id=action, rationale="policy selection")
         if isinstance(action, dict):
             assert self.state_data is not None
-            payload = {
-                "step": action.get("step", self.state_data.step),
-                "hospital_id": action.get("hospital_id"),
-                "rationale": action.get("rationale"),
-            }
-            return Action(**payload)
+            return Action(
+                step=action.get("step", self.state_data.step),
+                hospital_id=str(action.get("hospital_id", "")),
+                rationale=action.get("rationale"),
+            )
         raise ValueError("Action must be Action, hospital_id string, or action dict.")
 
     def _build_hospital_states(self, scenario: dict[str, Any]) -> list[HospitalState]:
@@ -388,8 +389,8 @@ class EmergencyEnv:
                     distance_km=distance,
                     icu_display=icu_display,
                     icu_actual=icu_actual,
-                    specialization=specialization,
-                    traffic=traffic,
+                    specialization=cast(Literal["cardiac", "trauma", "general"], specialization),
+                    traffic=cast(Literal["low", "medium", "high"], traffic),
                 )
             )
             extra_count += 1
@@ -444,18 +445,18 @@ class EmergencyEnv:
         )
         reward = max(MIN_REWARD, min(MAX_REWARD, reward))
 
+        raw_delay = (
+            unknown_critical_penalty
+            + repeat_penalty
+            + failed_repeat_penalty
+            + traffic_penalty
+            + hidden_case_penalty
+        )
         breakdown = RewardBreakdown(
             survival_component=max(MIN_REWARD, min(MAX_REWARD, (status_reward + 0.5) / 1.5)),
             time_efficiency_component=max(MIN_REWARD, min(MAX_REWARD, 1.0 - (travel_time / 25.0))),
-            specialization_component=(MAX_REWARD if self._specialization_match(selected) else 0.4),
-            delay_penalty=min(
-                MAX_REWARD,
-                unknown_critical_penalty
-                + repeat_penalty
-                + failed_repeat_penalty
-                + traffic_penalty
-                + hidden_case_penalty,
-            ),
+            specialization_component=max(MIN_REWARD, min(MAX_REWARD, MAX_REWARD if self._specialization_match(selected) else 0.4)),
+            delay_penalty=max(MIN_REWARD, min(MAX_REWARD, raw_delay)),
         )
 
         return reward, breakdown
@@ -1019,7 +1020,7 @@ class EmergencyEnv:
         assert self.state_data is not None
         for hospital in self.state_data.hospitals:
             if self._rng.random() < 0.40:
-                hospital.traffic = self._traffic_shift(hospital.traffic, self.state_data.scenario_difficulty)
+                hospital.traffic = cast(Literal["low", "medium", "high"], self._traffic_shift(hospital.traffic, self.state_data.scenario_difficulty))
 
             if self._rng.random() < DifficultyModifier.get_icu_mismatch_probability(self.state_data.scenario_difficulty):
                 hospital.icu_actual = not hospital.icu_actual
@@ -1082,7 +1083,9 @@ class EmergencyEnv:
 
     def _update_learning_memory(self, hospital_id: str, success: bool, reward: float) -> None:
         memory = self._load_memory()
-        entry = memory.get(hospital_id, LearningEntry())
+        entry = memory.get(hospital_id)
+        if entry is None:
+            entry = LearningEntry()
 
         if success:
             entry.success += 1
@@ -1113,7 +1116,7 @@ class EmergencyEnv:
         progress_component = self._progress_score()
         reward_component = max(MIN_REWARD, min(MAX_REWARD, self.state_data.reward))
         score = 0.15 + (0.35 * reward_component) + (0.25 * progress_component)
-        return max(0.1, min(0.85, score))
+        return max(MIN_REWARD, min(MAX_REWARD, max(0.1, min(0.85, score))))
 
     def _success_score(self) -> float:
         assert self.state_data is not None
@@ -1123,7 +1126,7 @@ class EmergencyEnv:
         rejected_steps = sum(1 for item in self.trajectory if item.get("outcome_status") == "rejected")
         route_quality = max(0.0, 1.0 - (rejected_steps / total_steps))
         score = (0.45 * reward_component) + (0.40 * progress_component) + (0.15 * route_quality)
-        return max(0.25, min(0.99, score))
+        return max(MIN_REWARD, min(MAX_REWARD, max(0.25, min(0.99, score))))
 
 
 ACDEEnvironment = EmergencyEnv
