@@ -1,4 +1,4 @@
-﻿import json
+import json
 from pathlib import Path
 from typing import Any, Literal, cast
 
@@ -681,7 +681,7 @@ class EmergencyEnv:
             status="rejected",
             reason="Hidden mismatch at arrival (wrong risky guess). Rerouting required.",
             validation_details=arrival_outcome.validation_details,
-            reward_modifier=0.0,
+            reward_modifier=0.001,
         )
         return (
             forced_reject,
@@ -759,7 +759,7 @@ class EmergencyEnv:
                 status="rejected",
                 reason=reason,
                 validation_details=new_validation,
-                reward_modifier=0.0,
+                reward_modifier=0.001,
             ),
             0.12,
             f"Hidden case: {reason}. Rerouting required.",
@@ -810,7 +810,7 @@ class EmergencyEnv:
                 status="rejected",
                 reason="Condition became irreversible after delays",
                 validation_details=arrival_outcome.validation_details,
-                reward_modifier=0.0,
+                reward_modifier=0.001,
             ),
             "Partial chain cap: condition became irreversible.",
         )
@@ -888,7 +888,7 @@ class EmergencyEnv:
                     status="rejected",
                     reason="Condition relapsed after temporary stabilization",
                     validation_details=arrival_outcome.validation_details,
-                    reward_modifier=0.0,
+                    reward_modifier=0.001,
                     terminal=False,
                 ),
                 "Recovery guard: partial relapsed to rejected.",
@@ -967,7 +967,7 @@ class EmergencyEnv:
                 "dynamic_delay": dynamic_delay,
                 "critical_limit": self.state_data.critical_time_limit_minutes,
                 "specialization_match": self._specialization_match(selected),
-                "suitability_score": arrival_outcome.validation_details.patient_suitability if arrival_outcome.validation_details else 0.5,
+                "suitability_score": max(MIN_REWARD, min(MAX_REWARD, arrival_outcome.validation_details.patient_suitability if arrival_outcome.validation_details else 0.5)),
             }
         )
 

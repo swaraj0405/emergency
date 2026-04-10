@@ -11,6 +11,15 @@ Requires-Dist: requests==2.32.3
 Requires-Dist: openai>=2.7.2
 Requires-Dist: openenv-core
 
+---
+title: ACDE OpenEnv
+emoji: "🚑"
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+---
+
 # Emergency Routing Simulation (ACDE)
 
 This project is a simulation environment for emergency ambulance routing.
@@ -94,6 +103,54 @@ When server mode is running:
 - `POST /reset`
 - `POST /step`
 - `GET /state`
+
+## Action Space
+
+The agent sends one action per step as JSON:
+
+```json
+{
+  "step": 1,
+  "hospital_id": "H3",
+  "rationale": "short decision reason"
+}
+```
+
+Action fields:
+- `step` (int, >=1): must match current environment step
+- `hospital_id` (str): target hospital identifier
+- `rationale` (str, optional): policy explanation
+
+## Observation Space
+
+Each `reset()` and `step()` returns an observation with:
+- episode metadata: `episode_id`, `seed`, `task_id`, `scenario_name`, `scenario_difficulty`
+- patient state: `patient_condition`, `required_specialization`, remaining time fields
+- hospital list: `hospital_id`, `distance_km`, `icu`, `specialization`, `traffic`
+- routing history: visited/failed hospitals and failure reasons
+- hidden-state feedback: `last_arrival_outcome` summary (status/reason/suitability)
+- memory snapshot used by the baseline policy
+
+Core schema is defined by Pydantic models in:
+- `app/models/action.py`
+- `app/models/observation.py`
+- `app/models/state.py`
+- `app/models/reward.py`
+
+## Required Environment Variables
+
+Before running `inference.py`, define:
+- `API_BASE_URL`: API base URL for the OpenAI-compatible endpoint
+- `MODEL_NAME`: model name used for rationale generation
+- `HF_TOKEN`: API key/token
+
+Windows PowerShell example:
+
+```powershell
+$env:API_BASE_URL = "https://api-inference.huggingface.co/v1"
+$env:MODEL_NAME = "your-model-id"
+$env:HF_TOKEN = "your-token"
+```
 
 ## Installation
 

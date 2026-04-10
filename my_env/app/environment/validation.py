@@ -192,9 +192,10 @@ class HospitalValidator:
         # Add difficulty-based noise
         if difficulty == "hard":
             noise = self.rng.uniform(-0.15, 0.15)
-            suitability = max(0.0, min(1.0, suitability + noise))
+            suitability = suitability + noise
         
-        return suitability
+        # Clamp to strict (0, 1) — validator rejects exact 0.0 and 1.0
+        return max(0.001, min(0.999, suitability))
 
     def _determine_outcome(
         self,
@@ -271,7 +272,7 @@ class HospitalValidator:
             return (
                 "rejected",
                 f"Hospital cannot admit: {', '.join(rejection_reasons[:2])}",
-                0.0,
+                0.001,
                 False,
             )
         
@@ -347,7 +348,7 @@ class HospitalValidator:
                 return (
                     "rejected",
                     "Condition became non-transferable during delay; immediate critical care failed",
-                    0.0,
+                    0.001,
                     True,
                 )
 
@@ -359,7 +360,7 @@ class HospitalValidator:
             )
         
         # Full acceptance
-        confidence_bonus = 1.0
+        confidence_bonus = 0.999
         if validation.patient_suitability >= 0.8:
             confidence_bonus = 1.1
         elif validation.patient_suitability >= 0.7:
@@ -378,7 +379,7 @@ class HospitalValidator:
             return (
                 "rejected",
                 "Unexpected complication at arrival",
-                0.0,
+                0.001,
                 False,
             )
 
@@ -386,7 +387,7 @@ class HospitalValidator:
             return (
                 "accepted",
                 "successful admission under uncertainty",
-                1.0,
+                0.999,
                 False,
             )
         
